@@ -1,3 +1,4 @@
+process.loadEnvFile();
 const express = require("express");
 const { auth } = require("./middlewares/auth");
 // require("./config/database");
