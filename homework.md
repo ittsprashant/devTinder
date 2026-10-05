@@ -1,0 +1,2 @@
+- difference between app.use and app.all - find out
+- difference between all http methods
