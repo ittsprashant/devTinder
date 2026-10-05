@@ -1,2 +1,3 @@
 - difference between app.use and app.all - find out
 - difference between all http methods
+- why unable to use next in database.js but works in auth.js

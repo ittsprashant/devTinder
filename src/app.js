@@ -1,5 +1,7 @@
 const express = require("express");
-const {auth} = require("../middlewares/auth");
+const { auth } = require("./middlewares/auth");
+// require("./config/database");
+const { connectDB } = require("./config/database")
 
 const app = express();
 
@@ -11,7 +13,7 @@ app.use("/admin", (req, res, next) => {
 
     console.log("Admin auth being checked")
 
-    if(!isAuthorized){
+    if (!isAuthorized) {
         res.status(401).send("Unauthorized")
     }
 
@@ -36,20 +38,33 @@ app.get("/auth/fetchSecrets", (req, res, next) => {
 
 // GET calls = app.get will only be eligible for GET calls
 app.get("/user", (req, res) => {
-    res.send({firstName: "Prashant"})
-} )
+    res.send({ firstName: "Prashant" })
+})
 
 
 // app.use will handle all HTTP methods
-app.use("/hello",(req, res) => {
+app.use("/hello", (req, res) => {
     res.send("Hello world");
 })
 
 
 
-app.listen(7777, () => {
-    console.log("Successfully listening on port 7777");
-});
+connectDB()
+    .then(() => {
+        console.log("Database connection successful");
+        app.listen(7777, connectDB, () => {
+            console.log("Successfully listening on port 7777");
+        });
+    })
+    .catch((err) => {
+        console.log("Database not connected", err)
+    })
+
+
+// app.listen(7777, connectDB, () => {
+//     console.log("Successfully listening on port 7777");
+// });
+
 
 app.use("/xyz", (req, res, next) => {
     console.log("1st route handler");
@@ -69,7 +84,7 @@ app.use("/xyz", (req, res, next) => {
 
 // it is better to use try catch instead but the below method is also one way
 app.use("/", (err, req, res, next) => {
-    if(err){
+    if (err) {
         res.status(500).send("Something went wrong!")
     }
 })
